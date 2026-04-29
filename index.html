@@ -213,7 +213,7 @@
 
   </div>
   <div class="footer">
-    <span class="version">v58</span>
+    <span class="version">v65</span>
     <div class="slash-mark"></div>
   </div>
 </div>
@@ -324,8 +324,15 @@
   }
 
   // Inputs
-  // Initialise l'AudioContext dès le premier tap (requis par iOS)
-  document.addEventListener('touchstart', () => getAudioCtx(), { once: true });
+  // Déverrouillage audio iOS : joue un son silencieux au premier tap
+  document.addEventListener('touchstart', () => {
+    const ctx = getAudioCtx();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+  }, { once: true });
 
   document.getElementById('participants').addEventListener('input', function() {
     document.getElementById('p-val').textContent = this.value;
