@@ -106,7 +106,8 @@
   .btn-copy { width: 100%; background: transparent; border: 1px solid var(--vert-eau); color: var(--vert-eau); padding: 10px; font-size: 12px; font-weight: 600; font-family: inherit; letter-spacing: 0.05em; cursor: pointer; transition: background .15s; }
   .btn-copy:hover { background: rgba(26,171,142,0.08); }
   .btn-copy.copied { background: rgba(26,171,142,0.15); }
-  .footer { padding: 10px 28px 14px; display: flex; align-items: center; justify-content: flex-end; }
+  .footer { padding: 10px 28px 14px; display: flex; align-items: center; justify-content: space-between; }
+  .version { font-size: 9px; color: var(--muted); font-weight: 500; }
   .slash-mark { width: 14px; height: 22px; background: var(--vert-eau); opacity: 0.4; transform: skewX(-29deg); }
 </style>
 </head>
@@ -212,6 +213,7 @@
 
   </div>
   <div class="footer">
+    <span class="version">v58</span>
     <div class="slash-mark"></div>
   </div>
 </div>
