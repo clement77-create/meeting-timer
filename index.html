@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Réunion €">
@@ -165,7 +165,7 @@
       </div>
       <div class="counter-card" id="card-cost">
         <span class="counter-label" id="label-cost">Coût réel</span>
-        <span class="alarm-emoji">💸💸</span>
+        <span class="alarm-emoji">🚨🚨</span>
         <div class="counter-val" id="display-cost">0,00 €</div>
       </div>
     </div>
@@ -238,9 +238,17 @@
     return `${pad(h)}:${pad(m)}:${pad(s)}<span class="ms">.${pad(cs)}</span>`;
   }
 
+  let audioCtx = null;
+
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
   function playAlert() {
     try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = getAudioCtx();
       const bursts = [0, 0.22, 0.44];
       bursts.forEach(delay => {
         const t = ctx.currentTime + delay;
@@ -313,6 +321,9 @@
   }
 
   // Inputs
+  // Initialise l'AudioContext dès le premier tap (requis par iOS)
+  document.addEventListener('touchstart', () => getAudioCtx(), { once: true });
+
   document.getElementById('participants').addEventListener('input', function() {
     document.getElementById('p-val').textContent = this.value;
     document.getElementById('participants-live').value = this.value;
