@@ -19,12 +19,12 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// Fetch : réseau en priorité, cache en fallback
+// Fetch : réseau en priorité, cache en fallback (erreur réseau OU 404)
 self.addEventListener('fetch', e => {
   e.respondWith(
     fetch(e.request)
       .then(res => {
-        // Réseau dispo → on met à jour le cache
+        if (!res.ok) return caches.match(e.request).then(c => c || res);
         const clone = res.clone();
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return res;
