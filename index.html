@@ -66,13 +66,13 @@
   .estim-detail { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .divider { height: 1px; background: rgba(14,15,48,0.08); margin-bottom: 24px; }
   .counters { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 3px; }
-  .counter-card { background: rgba(14,15,48,0.04); padding: 20px 20px 16px; position: relative; overflow: hidden; border: 1px solid rgba(14,15,48,0.07); transition: border-color .3s; }
+  .counter-card { background: rgba(14,15,48,0.04); padding: 16px 12px 12px; position: relative; overflow: hidden; border: 1px solid rgba(14,15,48,0.07); transition: border-color .3s; }
   .counter-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--vert-eau); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
   .counter-card.active::after { transform: scaleX(1); }
   .counter-card.over { animation: border-blink 0.6s step-start infinite; }
   @keyframes border-blink { 0%,100%{ border-color: rgba(224,62,62,0.8); } 50%{ border-color: rgba(224,62,62,0.1); } }
   .counter-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--bleu-nuit); display: block; margin-bottom: 10px; }
-  .counter-val { font-size: 34px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1; transition: color .3s; }
+  .counter-val { font-size: clamp(18px, 5vw, 34px); font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1; transition: color .3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .counter-val .ms { font-size: 0.5em; opacity: 0.6; }
   #display-time { color: var(--bleu-nuit); }
   #display-cost { color: var(--vert-eau); }
@@ -317,7 +317,12 @@
     document.getElementById('p-val').textContent = this.value;
     document.getElementById('participants-live').value = this.value;
     document.getElementById('p-live-val').textContent = this.value;
-    renderEstim(); renderCost(); renderPerMin();
+    // Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  renderEstim(); renderCost(); renderPerMin();
   });
   document.getElementById('participants-live').addEventListener('input', function() {
     document.getElementById('p-live-val').textContent = this.value;
